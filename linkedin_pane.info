@@ -1,0 +1,6 @@
+name = Linkedin Pane
+description = Allow a Panel pane to be added which displays a Linkedin Profile.
+core = 7.x
+package = Panels
+dependencies[] = ctools
+dependencies[] = panels

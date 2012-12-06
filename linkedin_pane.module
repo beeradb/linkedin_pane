@@ -1,0 +1,58 @@
+<?php
+
+// Not positive if this default API key will work across domains. I highly suspect not.
+define('LINKEDIN_PANE_DEFAULT_API_KEY', 'obyefwmvf8we');
+
+/**
+ * Implements ook_ctools_plugin_directory().
+ */
+function linkedin_pane_ctools_plugin_directory($module, $plugin) {
+  return 'plugins/' . $plugin;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function linkedin_pane_menu() {
+
+  // If we have settings, we need a settings form, right?
+  $items['admin/config/development/linkedin-pane'] = array(
+    'type' => MENU_NORMAL_ITEM,
+    'title' => 'LinkedIn Pane Settings',
+    'description' => 'Administer settings (API key) related to the LinkedIn Pane module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('linkedin_pane_settings_form'),
+    'access arguments' => array('administer linkedin pane'),
+  );
+
+  return $items;
+}
+
+/**
+ * Simple settings form to allow users to input the LinkedIn API key.
+ */
+function linkedin_pane_settings_form() {
+  $form = array();
+
+  $form['linkedin_pane_api_key'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Linkedin API Key'),
+    '#default_value' => variable_get('linkedin_pane_api_key', LINKEDIN_PANE_DEFAULT_API_KEY),
+    '#required' => TRUE,
+    '#description' => t('The LinkedIn API key for this domain.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function linkedin_pane_permission() {
+  return array(
+    'administer linkedin pane' => array(
+      'title' => t('Administer LinkedIn pane settings'), 
+      'description' => t('Allow users to change the LinkedIn API key'),
+    ),
+  );
+}
